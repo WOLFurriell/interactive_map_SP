@@ -2,8 +2,8 @@
 rm(list = ls())
 
 #=========================================================================
-#= IBEU MAPA  ============================================================ 
-#========================================================================
+#= MAPA de SP ============================================================ 
+#=========================================================================
 library(ggmap); library(ggplot2); library(dplyr); library(rgdal);library(gridExtra);
 library(dplyr); library(lattice);library(sp);library(leaflet);library(leaflet.extras);
 library(devtools);library(htmlwidgets);library(webshot)
@@ -23,7 +23,7 @@ plot(shape)
 pontos <- shapefile("W:/BRADESCO/mapa Html/Shp/LAYER_AREAS_CONTAMINADAS/DEINFO_AREAS_CONTAMINADAS.shp")
 plot(pontos)
 
-# Manipulação e simulação das informações ------------------------------
+# ManipulaÃ§Ã£o e simulaÃ§Ã£o das informaÃ§Ãµes ------------------------------
 
 LatLong <- coordinates(spTransform(pontos, CRS("+proj=longlat +datum=WGS84"))) %>%  as.data.frame()
 names(LatLong) <- c("long","lat")
@@ -121,11 +121,11 @@ mapa <- leaflet() %>% addTiles() %>%
                    popup = paste("n: ",LatLong$n), color = "black",
                    group = "Pontos") %>%
   # --------------------------------------------------------------------------------------
-  # Plotando os pontos com informações descritivas
+  # Plotando os pontos com informaÃ§Ãµes descritivas
   addCircleMarkers(data = LatLong,
                    lng = ~long, lat = ~lat, radius = 5,
                    popup = mytext,
-                   group = "Informações dos pontos") %>%
+                   group = "InformaÃ§Ãµes dos pontos") %>%
   # --------------------------------------------------------------------------------------
   # Cartograma de pontos
   addCircles(data = LatLong, radius = 300, 
@@ -153,7 +153,7 @@ mapa <- leaflet() %>% addTiles() %>%
              lng = ~long, lat = ~lat,
              intensity = ~n,
              blur = 10, min = 0, max = 30,
-             group = "HeatMap frequência") %>% 
+             group = "HeatMap frequÃªncia") %>% 
   # --------------------------------------------------------------------------------------
   # Cluster de proximidade 
   addCircleMarkers(data = LatLong,
@@ -165,27 +165,27 @@ mapa <- leaflet() %>% addTiles() %>%
   # --------------------------------------------------------------------------------------
   # Legenda Densidade 1
   addLegend("bottomright", pal = qpal, values = LatLong$n,
-          title = "Número de<br/>observações",
+          title = "NÃºmero de<br/>observaÃ§Ãµes",
           labFormat = labelFormat(prefix = "n:"),
           opacity = 1, group = "Densidade 1") %>%
   
   # Legenda Densidade 2
   addLegend("bottomright", pal = qpal, values = LatLong$n,
-            title = "Número de<br/>observações",
+            title = "NÃºmero de<br/>observaÃ§Ãµes",
             labFormat = labelFormat(prefix = "n:"),
             opacity = 1, group = "Densidade 2") %>% 
 
   # --------------------------------------------------------------------------------------  
   addLayersControl(
     baseGroups = c("OpenStreetMap","StamenToner","WorldImagery"),
-    overlayGroups = c("Brasil","Bairros","Icon","Pontos","Informações dos pontos",
-                      "Densidade 1","Densidade 2","HeatMap proximidade","HeatMap frequência", 
+    overlayGroups = c("Brasil","Bairros","Icon","Pontos","InformaÃ§Ãµes dos pontos",
+                      "Densidade 1","Densidade 2","HeatMap proximidade","HeatMap frequÃªncia", 
                       "Clusters de proximidade"),
     options = layersControlOptions(collapsed = F)) %>% 
   
-  # Desmarcando a caixa de seleção 
-  hideGroup(c("Brasil","Bairros","Icon","Pontos","Informações dos pontos",
-              "Densidade 1","Densidade 2","HeatMap proximidade","HeatMap frequência",
+  # Desmarcando a caixa de seleÃ§Ã£o 
+  hideGroup(c("Brasil","Bairros","Icon","Pontos","InformaÃ§Ãµes dos pontos",
+              "Densidade 1","Densidade 2","HeatMap proximidade","HeatMap frequÃªncia",
               "Clusters de proximidade"))
 
 mapa
